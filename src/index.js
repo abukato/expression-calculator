@@ -51,12 +51,14 @@ function expressionCalculator(expr) {
       if (operators.length < 1 || priority[arr[i]] > priority[operators[operators.length-1]] || arr[i] === '(') {
         operators.push(arr[i]);
       } else if (arr[i] === ')') {
-        result = calc(numbers[numbers.length-2], numbers[numbers.length-1], operators[operators.length-1]);
-        numbers.pop();
-        numbers.pop();
+        while (operators[operators.length-1] !== '(') {
+          result = calc(numbers[numbers.length-2], numbers[numbers.length-1], operators[operators.length-1]);
+          numbers.pop();
+          numbers.pop();
+          operators.pop();
+          numbers.push(result);     
+        }
         operators.pop();
-        operators.pop();
-        numbers.push(result);
       } else {
         result = calc(numbers[numbers.length-2], numbers[numbers.length-1], operators[operators.length-1]);
         numbers.pop();
@@ -64,17 +66,19 @@ function expressionCalculator(expr) {
         operators.pop();
         numbers.push(result);
         operators.push(arr[i]);
-        
       }
     } 
   }
-  while (operators.length !== 0) {
-    result = calc(numbers[numbers.length-2], numbers[numbers.length-1], operators[operators.length-1]);
-    numbers.pop();
-    numbers.pop();
-    operators.pop();
-    numbers.push(result);
+  
+  while (operators.length !== 0) { 
+    result = calc(numbers[0], numbers[1], operators[0]);
+    numbers.shift();
+    numbers.shift();
+    operators.shift();
+    numbers.unshift(result);
+    
   }
+
   return result;
 }
 
