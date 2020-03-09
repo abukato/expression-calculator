@@ -42,7 +42,14 @@ function expressionCalculator(expr) {
   let numbers = [];
   let operators = [];
   let result = 0;
-  const lengthExpr = arr.length;
+
+  const updateArrays = function() {
+    result = calc(numbers[numbers.length-2], numbers[numbers.length-1], operators[operators.length-1]);
+    numbers.pop();
+    numbers.pop();
+    operators.pop();
+    numbers.push(result);
+  }
 
   for (let i = 0; i < arr.length; i++){
     if(!isNaN(arr[i])) {
@@ -54,31 +61,19 @@ function expressionCalculator(expr) {
         if (operators[operators.length-1] === '(') {
           operators.pop();
         } else {
-          result = calc(numbers[numbers.length-2], numbers[numbers.length-1], operators[operators.length-1]);
-          numbers.pop();
-          numbers.pop();
-          operators.pop();
-          numbers.push(result);
+          updateArrays();
           i--;
         }
       } else {
-        result = calc(numbers[numbers.length-2], numbers[numbers.length-1], operators[operators.length-1]);
-        numbers.pop();
-        numbers.pop();
-        operators.pop();
-        numbers.push(result);
+        updateArrays();
         i--;
       }
     }
   }
 
-  if(numbers.length > 1) {
-    for (let i = 0; i < numbers.length; i++) {
-      result = calc(numbers[numbers.length-2], numbers[numbers.length-1], operators[operators.length-1]);
-      numbers.pop();
-      numbers.pop();
-      operators.pop();
-      numbers.push(result);
+  if (numbers.length > 1) {
+    for (let i = 0; i < numbers.length; i++){
+      updateArrays();
     }
   }
 
