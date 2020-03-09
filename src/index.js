@@ -44,28 +44,30 @@ function expressionCalculator(expr) {
   let result = 0;
   const lengthExpr = arr.length;
 
-  for (let i = 0; i < lengthExpr; i++) {
-    if (!isNaN(arr[i])) {
-      numbers.push(+arr[i]);
+  for (let i = 0; i < arr.length; i++){
+    if(!isNaN(arr[i])) {
+        numbers.push(+arr[i]);
+    } else if (operators.length === 0 || arr[i] === '(' || priority[arr[i]] > priority[operators[operators.length-1]]) {
+      operators.push(arr[i]);
     } else {
-      if (operators.length < 1 || priority[arr[i]] > priority[operators[operators.length-1]] || arr[i] === '(') {
-        operators.push(arr[i]);
-      } else if (arr[i] === ')') {
-        while (operators[operators.length-1] !== '(') {
+      if (arr[i] === ')') {
+        if (operators[operators.length-1] === '(') {
+          operators.pop();
+        } else {
           result = calc(numbers[numbers.length-2], numbers[numbers.length-1], operators[operators.length-1]);
           numbers.pop();
           numbers.pop();
           operators.pop();
           numbers.push(result);
+          i--;
         }
-        operators.pop();
       } else {
         result = calc(numbers[numbers.length-2], numbers[numbers.length-1], operators[operators.length-1]);
         numbers.pop();
         numbers.pop();
         operators.pop();
         numbers.push(result);
-        operators.push(arr[i]);
+        i--;
       }
     }
   }
