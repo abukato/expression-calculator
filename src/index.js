@@ -56,7 +56,7 @@ function expressionCalculator(expr) {
           numbers.pop();
           numbers.pop();
           operators.pop();
-          numbers.push(result);     
+          numbers.push(result);
         }
         operators.pop();
       } else {
@@ -67,16 +67,17 @@ function expressionCalculator(expr) {
         numbers.push(result);
         operators.push(arr[i]);
       }
-    } 
+    }
   }
-  
-  while (operators.length !== 0) { 
-    result = calc(numbers[0], numbers[1], operators[0]);
-    numbers.shift();
-    numbers.shift();
-    operators.shift();
-    numbers.unshift(result);
-    
+
+  if(numbers.length > 1) {
+    for (let i = 0; i < numbers.length; i++) {
+      result = calc(numbers[numbers.length-2], numbers[numbers.length-1], operators[operators.length-1]);
+      numbers.pop();
+      numbers.pop();
+      operators.pop();
+      numbers.push(result);
+    }
   }
 
   return result;
